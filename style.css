@@ -89,3 +89,4 @@ input::placeholder{color:var(--muted)}
 :root[data-theme=light] .seg button.on,:root[data-theme=light] .days button.on{color:#fff}:root[data-theme=light] .days button.on small{color:#e4efff}
 :root[data-theme=light] .nav button.on,:root[data-theme=light] .steps li.on{color:#b85f00}
 .hbtns{display:flex;gap:8px;flex:none}.page{position:relative}.hero-t{position:absolute;top:8px;right:-8px;background:#05080fcc;color:#fff;border-color:#ffffff33;z-index:2}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stats>div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;min-width:0;display:flex;flex-direction:column;gap:1px}.stats b{font:italic 800 1.7rem/1.1 var(--disp);font-variant-numeric:tabular-nums}.stats span{font-size:.72rem;line-height:1.15;color:var(--muted)}.stats strong{margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:.92rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}

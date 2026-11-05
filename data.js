@@ -1,0 +1,46 @@
+/* Base inicial de veículos. Porte: p = hatch compacto | m = hatch médio, sedã compacto, SUV compacto, picape pequena
+   g = sedã médio/grande, SUV médio, picape intermediária, minivan | gg = picape grande, SUV grande, van */
+const CARS = {
+ "Audi":{p:"A1",m:"A3,Q3",g:"A4,A5,A6,Q5",gg:"Q7,Q8,e-tron"},
+ "BMW":{p:"Mini Cooper",m:"Série 1,Série 2,X1",g:"Série 3,Série 4,Série 5,X3,X4",gg:"X5,X6,X7"},
+ "BYD":{p:"Dolphin Mini",m:"Dolphin,Yuan Pro",g:"King,Song Pro,Song Plus,Yuan Plus,Seal",gg:"Tan,Shark"},
+ "Caoa Chery":{p:"QQ",m:"Arrizo 5,Arrizo 6,Tiggo 2,Tiggo 3X,Tiggo 5X",g:"Tiggo 7,Tiggo 7 Pro,Celer Sedan",gg:"Tiggo 8,Tiggo 8 Pro"},
+ "Chevrolet":{p:"Celta,Corsa Hatch,Onix,Agile,Sonic,Joy,Kadett",m:"Prisma,Classic,Corsa Sedan,Onix Plus,Cobalt,Astra,Tracker,Meriva,Vectra GT,Monza,Chevette",g:"Cruze,Vectra,Omega,Spin,Equinox,Montana,Zafira,Captiva",gg:"S10,Trailblazer,Blazer,Silverado,D20"},
+ "Citroën":{p:"C3",m:"Basalt,C3 Aircross,C4 Cactus,Xsara Picasso,C4 Hatch,DS3",g:"C4 Lounge,C4 Picasso,Aircross,Berlingo",gg:"Jumper,Jumpy"},
+ "Dodge":{g:"Journey",gg:"Durango,Ram 1500"},
+ "Fiat":{p:"Mobi,Uno,Palio,Argo,Punto,147",m:"Siena,Grand Siena,Cronos,Pulse,Fastback,Strada,Fiorino,Idea,Linea,Bravo,Stilo,Marea,Tempra,Tipo",g:"Toro,Doblò,Freemont",gg:"Titano,Ducato"},
+ "Ford":{p:"Ka,Fiesta,Escort",m:"Ka Sedan,Fiesta Sedan,Focus,EcoSport,Courier",g:"Fusion,Territory,Bronco Sport,Maverick,Edge",gg:"Ranger,F-250,F-150,Transit"},
+ "Geely":{p:"EX2",g:"EX5"},
+ "GWM":{m:"Ora 03",g:"Haval H6,Haval H4",gg:"Poer,Tank 300"},
+ "Honda":{p:"Fit",m:"City,HR-V,WR-V",g:"Civic,Accord,ZR-V",gg:"CR-V,Pilot,Odyssey"},
+ "Hyundai":{p:"HB20",m:"HB20S,i30,Creta,Veloster",g:"Elantra,Azera,Sonata,Tucson,ix35",gg:"Santa Fe,Palisade,HR,Vera Cruz"},
+ "Jaecoo":{g:"Jaecoo 7"},
+ "Jeep":{m:"Renegade,Avenger",g:"Compass,Cherokee,Commander",gg:"Grand Cherokee,Wrangler,Gladiator"},
+ "Kia":{p:"Picanto,Soul",m:"Stonic,Rio",g:"Cerato,Sportage,Niro,Optima",gg:"Sorento,Carnival,Bongo,Mohave"},
+ "Land Rover":{g:"Evoque,Discovery Sport,Freelander",gg:"Defender,Discovery,Range Rover,Range Rover Sport"},
+ "Lifan":{p:"320",m:"530,X60"},
+ "Mercedes-Benz":{m:"Classe A,CLA,GLA",g:"Classe C,Classe E,GLB,GLC",gg:"Classe S,GLE,GLS,Sprinter,Vito"},
+ "Mitsubishi":{p:"Colt",m:"ASX",g:"Lancer,Eclipse Cross,Outlander Sport",gg:"L200 Triton,Pajero,Pajero Dakar,Pajero Sport,Outlander"},
+ "Nissan":{p:"March",m:"Versa,Kicks,Kait,Tiida",g:"Sentra,Livina",gg:"Frontier,X-Trail,Pathfinder"},
+ "Omoda":{m:"Omoda 5"},
+ "Peugeot":{p:"206,207,208",m:"2008,307,Hoggar,207 Sedan",g:"308,408,3008,5008,Partner",gg:"Boxer,Expert"},
+ "Ram":{g:"Rampage",gg:"1500,2500,3500,Dakota"},
+ "Renault":{p:"Kwid,Clio,Sandero",m:"Logan,Symbol,Kardian,Captur,Stepway,Scénic,Mégane,Oroch",g:"Fluence,Duster,Boreal,Kangoo",gg:"Master,Koleos,Alaskan"},
+ "Suzuki":{p:"Swift,Ignis",m:"Jimny,SX4,Vitara",g:"S-Cross,Grand Vitara"},
+ "Toyota":{p:"Etios Hatch",m:"Yaris Hatch,Yaris Sedan,Etios Sedan,Yaris Cross",g:"Corolla,Corolla Cross,Prius,RAV4,Camry",gg:"Hilux,SW4,Land Cruiser,Bandeirante"},
+ "Volkswagen":{p:"Gol,Fox,Up!,Polo,Tera,Fusca,Crossfox",m:"Voyage,Virtus,Golf,Saveiro,T-Cross,Nivus,Polo Sedan,SpaceFox,Parati,Santana,Bora",g:"Jetta,Passat,Taos,Tiguan,Kombi",gg:"Amarok,Touareg,Atlas,Delivery"},
+ "Volvo":{m:"EX30",g:"XC40,S60,V40",gg:"XC60,XC90"}
+};
+const BIKES = {
+ "BMW":"G 310 GS,G 310 R,F 750 GS,F 850 GS,R 1250 GS,R 1300 GS,S 1000 RR",
+ "Dafra":"Citycom 300,Cruisym 150,NH 190,Zig",
+ "Haojue":"DK 150,DR 160,NK 150,Chopper Road 150,VR 150",
+ "Harley-Davidson":"Iron 883,Fat Boy,Heritage,Road King,Street Glide,Sportster S",
+ "Honda":"Biz 110,Biz 125,Pop 110,CG 125,CG 150,CG 160,Bros 150,Bros 160,XRE 190,XRE 300,Sahara 300,CB 300F,CB 500F,CB 650R,Elite 125,PCX 160,ADV 160,NC 750X,Africa Twin,Hornet",
+ "Kawasaki":"Ninja 400,Ninja 650,Z400,Z650,Versys 650,Vulcan 650",
+ "Royal Enfield":"Classic 350,Hunter 350,Meteor 350,Himalayan,Interceptor 650",
+ "Shineray":"Jet 50,Phoenix 50,SHI 175,Worker 125",
+ "Suzuki":"Yes 125,Intruder 125,V-Strom 650,GSX-S750,Burgman 125",
+ "Triumph":"Speed 400,Scrambler 400,Tiger 660,Tiger 900,Street Triple",
+ "Yamaha":"Factor 125,Factor 150,Fazer 150,Fazer 250,Crosser 150,Lander 250,Ténéré 250,MT-03,MT-07,MT-09,R3,NMax 160,XMax 250,Fluo 125"
+};

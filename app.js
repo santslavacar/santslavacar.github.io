@@ -44,7 +44,7 @@ const ICON={
  home:'<path d="m3 11 9-8 9 8"/><path d="M5 10v11h14V10"/>',cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
  list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/>',img:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m21 16-5-5L5 20"/>',
  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',car:'<path d="M5 12 7 6h10l2 6"/><path d="M3 18v-4l2-2h14l2 2v4z"/><path d="M6 18v2M18 18v2M7 15h1M16 15h1"/>',
- chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+ chart:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>',gear:'<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
  tag:'<path d="M3 3h8l10 10-8 8L3 11z"/><circle cx="8" cy="8" r="1.5"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',wa:'<path d="M4 20l1.4-4.2A8 8 0 1 1 8.4 19z"/><path d="M9 9c0 3 3 6 6 6l1-2-2-1-1 1c-1 0-2-1-2-2l1-1-1-2z"/>',plus:'<path d="M12 5v14M5 12h14"/>',back:'<path d="m15 5-7 7 7 7"/>',check:'<path d="m5 12 5 5 9-10"/>'
 };
 const ic=(n,s=22)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]||''}</svg>`;
@@ -122,6 +122,10 @@ let pend=false;
 function refresh(){const x=document.activeElement;if(x&&/INPUT|TEXTAREA|SELECT/.test(x.tagName)){pend=true;return}pend=false;render()}
 document.addEventListener('focusout',()=>{if(pend)setTimeout(refresh,50)});
 function badge(){const n=D.bookings.filter(b=>b.status==='pendente').length;return n?`<i class="dot">${n}</i>`:''}
+let theme='dark';try{theme=localStorage.getItem('sants-tema')||'dark'}catch(e){}
+function applyTheme(){document.documentElement.dataset.theme=theme;document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='light'?'#f3f6fb':'#05080f')}
+applyTheme();
+const themeBtn=(c='')=>`<button class="iconb ${c}" id="theme-${c||'h'}" data-a="theme" aria-label="${theme==='light'?'Usar tema escuro':'Usar tema claro'}">${ic(theme==='light'?'moon':'sun')}</button>`;
 function head(t,sub,right=''){return `<header class="head"><div><h1>${t}</h1>${sub?`<p>${sub}</p>`:''}</div>${right}</header>`}
 function tierTitle(s){return s.group==='pacote'?`<span class="eyebrow">Lavagem</span><strong class="tname">${esc(s.name)}</strong>`:`<strong class="xname">${esc(s.name)}</strong>`}
 
@@ -151,7 +155,7 @@ function vHome(){
  const nx=D.bookings.filter(b=>b.clientId===S.user?.id&&live(b)).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start))[0];
  const wa=waLink(D.biz.whatsapp,'Olá! Quero saber dos pacotes especiais.');
  const pics=[GALLERY[4]];
- return `<img class="hero" src="img/hero.jpg" alt="Sant's Lava Car: cuidado que seu carro merece, resultado que você vê">${vb}
+ return `<img class="hero" src="img/hero.jpg" alt="Sant's Lava Car: cuidado que seu carro merece, resultado que você vê">${themeBtn('hero-t')}${vb}
  <button class="btn pri big" id="cta" data-a="tab" data-v="agendar">${ic('cal')} Agendar lavagem</button>
  ${nx?`<section><h2>Seu próximo horário</h2><button class="row card t-${tierOf(nx)}" data-a="tab" data-v="meus"><div class="grow"><b>${fDate(nx.date)} às ${fT(nx.start)}</b><small>${esc(vehName(nx.vehicle))} · ${esc(svcNames(nx))}</small></div>${pill(nx.status)}</button></section>`:''}
  <section><h2>Pacotes</h2><div class="stack">${pk.map(s=>pkgCard(s)).join('')}</div></section>
@@ -227,7 +231,7 @@ function vMeus(){
   ${b.minutes!==b.estMinutes?`<p class="note">O Giovanni ajustou o tempo de ${fD(b.estMinutes)} para ${fD(b.minutes)}.</p>`:''}${b.note?`<p class="note">Giovanni: ${esc(b.note)}</p>`:''}
   ${live(b)?(S.armCancel===b.id?`<div class="two"><button class="btn ghost" data-a="noCancel">Manter</button><button class="btn dng" id="c-yes-${b.id}" data-a="doCancel" data-v="${b.id}">Cancelar pedido</button></div>`:`<button class="link" data-a="armCancel" data-v="${b.id}">Cancelar agendamento</button>`):''}</article>`).join('')}</div>`:`<div class="empty"><b>Nenhum agendamento ainda.</b><p>Escolha um serviço e veja os horários livres.</p><button class="btn pri" data-a="tab" data-v="agendar">Agendar lavagem</button></div>`);
 }
-function vPerfil(){return head(esc(S.user.name),esc(S.user.email||'')+(S.user.phone?' · '+esc(S.user.phone):''))+`<section><h2>Meus veículos</h2><div class="stack tight">${S.user.vehicles.length?S.user.vehicles.map(v=>`<div class="chk"><span class="grow"><b>${esc(vehName(v))}</b> ${esc(v.year||'')}<small>${esc(v.color||'')} · ${SIZES[sizeOf(v)]}</small></span></div>`).join(''):'<p class="muted">Seu veículo fica salvo no primeiro agendamento.</p>'}</div></section>
+function vPerfil(){return head(esc(S.user.name),esc(S.user.email||'')+(S.user.phone?' · '+esc(S.user.phone):''),themeBtn())+`<section><h2>Meus veículos</h2><div class="stack tight">${S.user.vehicles.length?S.user.vehicles.map(v=>`<div class="chk"><span class="grow"><b>${esc(vehName(v))}</b> ${esc(v.year||'')}<small>${esc(v.color||'')} · ${SIZES[sizeOf(v)]}</small></span></div>`).join(''):'<p class="muted">Seu veículo fica salvo no primeiro agendamento.</p>'}</div></section>
  <section><h2>Colocar na tela do celular</h2><div class="card stack tight"><p><b>Android (Chrome):</b> toque nos três pontinhos e em Adicionar à tela inicial.</p><p><b>iPhone (Safari):</b> toque em Compartilhar e em Adicionar à Tela de Início.</p></div></section>
  <button class="btn ghost" id="sair" data-a="logout">Sair</button>`}
 
@@ -242,7 +246,7 @@ function vPainel(){
  const t=today(),td=D.bookings.filter(b=>b.date===t&&live(b)).sort((a,b)=>a.start-b.start),pend=D.bookings.filter(b=>b.status==='pendente').sort((a,b)=>(a.date+pad(a.start)).localeCompare(b.date+pad(b.start)));
  let cap=0,used=0,rev=0,miss=0;for(let i=0;i<7;i++){const d=addD(t,i),h=D.hours[pdate(d).getDay()];if(h.on)cap+=(h.close-h.open)*D.boxes;D.bookings.filter(b=>b.date===d&&live(b)).forEach(b=>{used+=b.minutes;if(b.status==='confirmado'){const p=bPrice(b);p==null?miss++:rev+=p}})}
  const occ=cap?Math.round(used/cap*100):0;
- return head(`Olá, ${esc((S.user?.name||'').split(' ')[0]||'empresa')}`,fDate(t),`<button class="iconb" id="cfg" data-a="cfgOpen" aria-label="Ajustes">${ic('gear')}</button>`)+
+ return head(`Olá, ${esc((S.user?.name||'').split(' ')[0]||'empresa')}`,fDate(t),`<div class="hbtns">${themeBtn()}<button class="iconb" id="cfg" data-a="cfgOpen" aria-label="Ajustes">${ic('gear')}</button></div>`)+
  `<div class="kpis"><div><small>Hoje</small><b>${td.length}</b><span>${td.length===1?'serviço':'serviços'}</span></div><div class="${pend.length?'warn':''}"><small>Para aprovar</small><b>${pend.length}</b><span>pedidos</span></div><div><small>7 dias</small><b>${occ}%</b><span>ocupado</span></div></div>
  <div class="rev"><small>A receber nos próximos 7 dias</small><b>${miss&&!rev?'Defina os preços':money(rev)}</b>${miss?`<button class="link" id="to-prices" data-a="tab" data-v="servicos">${miss} ${miss===1?'serviço':'serviços'} sem preço</button>`:''}</div>
  <section><h2>Para aprovar</h2>${pend.length?`<div class="stack tight">${pend.map(bRow).join('')}</div>`:'<p class="muted">Nenhum pedido aguardando.</p>'}</section>
@@ -320,6 +324,7 @@ function shVeh(){const f=S.sheet.f;return `<h2>Novo modelo</h2><div class="stack
 
 /* ===== Ações ===== */
 const A={
+ theme(){theme=theme==='light'?'dark':'light';try{localStorage.setItem('sants-tema',theme)}catch(e){}applyTheme();render()},
  tab(v){if(v==='entrar'||(v==='agendar'&&!S.user)){S.login=true;S.auth=null;S.loginAs='cliente';S.authErr='';S.after=v==='agendar'?'agendar':null;render();scrollTo(0,0);return}if(v==='agendar'&&S.w?.done)S.w=null;S.tab=v;S.armCancel=null;render();scrollTo(0,0)},
  loginAs(v){S.loginAs=v;S.auth=null;S.authErr='';render()},closeLogin(){S.login=false;S.authErr='';render();scrollTo(0,0)},
  async verifyNow(){await auth.currentUser.reload();await auth.currentUser.getIdToken(true);startSession(auth.currentUser)},

@@ -273,7 +273,7 @@ function vAgenda(){
  `<div class="days">${days.map(d=>{const dd=pdate(d),n=D.bookings.filter(b=>b.date===d&&live(b)).length;return `<button id="ad-${d}" data-a="aDay" data-v="${d}" class="${d===a?'on':''}"><small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b><small>${n?n+' serv.':'—'}</small></button>`}).join('')}</div>${line}`;
 }
 function vServicos(){const g=(t,k)=>`<section><h2>${t}</h2><div class="stack tight">${D.services.filter(s=>s.group===k).map(s=>{const pr=Object.values(s.price).some(p=>p!=null);return `<button class="row card t-${s.tier} ${s.active?'':'off'}" id="sv-${s.id}" data-a="svOpen" data-v="${s.id}"><span class="sv-i">${ic(s.icon)}</span><div class="grow"><b>${esc(s.name)}</b><small>${s.active?'':'Oculto · '}${s.min.g!=null?fD(s.min.g)+' no carro grande':'Sob consulta'} · ${pr?'com preço':'preço a definir'}</small></div></button>`}).join('')}</div></section>`;
- return head('Serviços','Tempo e preço variam por porte. Os valores atuais são exemplos.',`<button class="btn pri sm" id="sv-new" data-a="svNew">${ic('plus',18)} Novo</button>`)+g('Pacotes','pacote')+g('Outros serviços','extra')}
+ return head('Serviços','Tempo e preço variam por porte.',`<button class="btn pri sm" id="sv-new" data-a="svNew">${ic('plus',18)} Novo</button>`)+g('Pacotes','pacote')+g('Outros serviços','extra')}
 function vVeiculos(){
  const q=S.vq.toLowerCase(),rev=D.requests,l=allVeh().filter(v=>(!S.vs||sizeOf(v)===S.vs)&&(!q||`${v.brand} ${v.model}`.toLowerCase().includes(q)));
  const lrn=Object.entries(D.timeOv).flatMap(([k,o])=>Object.entries(o).map(([id,m])=>({k,id,m})));

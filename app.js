@@ -96,7 +96,7 @@ function slots(date,m,exId){
  for(let t=h.open;t+m<=h.close;t+=30)if(t>now&&fits(date,t,m,exId))out.push(t);
  return out;
 }
-const bPrice=b=>b.price!==undefined?b.price:totalPrice(b.vehicle,b.items);
+const bPrice=b=>b.price??totalPrice(b.vehicle,b.items);
 const svcNames=b=>b.items.map(id=>{const s=svc(id);return s?(s.group==='pacote'?'Lavagem '+s.name:s.name):id}).join(' + ');
 const vehName=v=>`${v.brand} ${v.model}`;
 const STATUS={pendente:'Aguardando aprovação',confirmado:'Confirmado',concluido:'Concluído',recusado:'Recusado',cancelado:'Cancelado'};
@@ -242,6 +242,13 @@ function vGaleria(){
 }
 
 /* ===== Master ===== */
+function statsHtml(){
+ const t=today(),wk=addD(t,-((pdate(t).getDay()+6)%7)),P=[['Semana',wk],['Mês',t.slice(0,7)+'-01'],['Ano',t.slice(0,4)+'-01-01']];
+ const done=D.bookings.filter(b=>b.status==='concluido'&&b.date<=t);
+ const rows=P.map(([l,s])=>{const x=done.filter(b=>b.date>=s);let v=0,sem=0;x.forEach(b=>{const p=bPrice(b);p==null?sem++:v+=Number(p)});return {l,n:x.length,v,sem}});
+ const sem=rows[2].sem;
+ return `<section><h2>Atendimentos e faturamento</h2><div class="stats">${rows.map(r=>`<div id="st-${r.l==='Mês'?'mes':r.l.toLowerCase()}"><small>${r.l}</small><b>${r.n}</b><span>${r.n===1?'cliente atendido':'clientes atendidos'}</span><strong>${money(r.v)}</strong></div>`).join('')}</div><small>Conta os serviços marcados como concluídos, pela data do serviço.${sem?` ${sem} ${sem===1?'ficou':'ficaram'} fora do faturamento por falta de preço.`:''}</small></section>`;
+}
 function vPainel(){
  const t=today(),td=D.bookings.filter(b=>b.date===t&&live(b)).sort((a,b)=>a.start-b.start),pend=D.bookings.filter(b=>b.status==='pendente').sort((a,b)=>(a.date+pad(a.start)).localeCompare(b.date+pad(b.start)));
  let cap=0,used=0,rev=0,miss=0;for(let i=0;i<7;i++){const d=addD(t,i),h=D.hours[pdate(d).getDay()];if(h.on)cap+=(h.close-h.open)*D.boxes;D.bookings.filter(b=>b.date===d&&live(b)).forEach(b=>{used+=b.minutes;if(b.status==='confirmado'){const p=bPrice(b);p==null?miss++:rev+=p}})}
@@ -249,7 +256,7 @@ function vPainel(){
  return head(`Olá, ${esc((S.user?.name||'').split(' ')[0]||'empresa')}`,fDate(t),`<div class="hbtns">${themeBtn()}<button class="iconb" id="cfg" data-a="cfgOpen" aria-label="Ajustes">${ic('gear')}</button></div>`)+
  `<div class="kpis"><div><small>Hoje</small><b>${td.length}</b><span>${td.length===1?'serviço':'serviços'}</span></div><div class="${pend.length?'warn':''}"><small>Para aprovar</small><b>${pend.length}</b><span>pedidos</span></div><div><small>7 dias</small><b>${occ}%</b><span>ocupado</span></div></div>
  <div class="rev"><small>A receber nos próximos 7 dias</small><b>${miss&&!rev?'Defina os preços':money(rev)}</b>${miss?`<button class="link" id="to-prices" data-a="tab" data-v="servicos">${miss} ${miss===1?'serviço':'serviços'} sem preço</button>`:''}</div>
- <section><h2>Para aprovar</h2>${pend.length?`<div class="stack tight">${pend.map(bRow).join('')}</div>`:'<p class="muted">Nenhum pedido aguardando.</p>'}</section>
+ ${statsHtml()}<section><h2>Para aprovar</h2>${pend.length?`<div class="stack tight">${pend.map(bRow).join('')}</div>`:'<p class="muted">Nenhum pedido aguardando.</p>'}</section>
  <section><h2>Hoje</h2>${td.length?`<div class="stack tight">${td.map(bRow).join('')}</div>`:'<p class="muted">Nenhum serviço para hoje.</p>'}</section>
  <button class="btn ghost" id="to-hours" data-a="hoursOpen">${ic('cal',18)} Liberar horários</button>`;
 }

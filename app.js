@@ -3,7 +3,7 @@ import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmai
 import {getFirestore,doc,collection,onSnapshot,setDoc,updateDoc,deleteDoc,addDoc,query,where,runTransaction,deleteField,arrayUnion,getDoc} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 const FB={apiKey:"AIzaSyBoqBROe9vmXqK8N8tY0d9b96NvxA-yJwM",authDomain:"santslavacar.firebaseapp.com",projectId:"santslavacar",storageBucket:"santslavacar.firebasestorage.app",messagingSenderId:"984432354821",appId:"1:984432354821:web:393b71cb42358f893d1e6c"};
 const fbApp=initializeApp(FB),auth=getAuth(fbApp),db=getFirestore(fbApp);auth.languageCode='pt-BR';
-const EMPRESAS=['gstsoares27@gmail.com'];
+const EMPRESAS=['gstsoares27@gmail.com','geovanesantosx1999@gmail.com'];
 const GALLERY=[
  {service:'Higienização de bancos',img:'bancos-1',alt:'Banco traseiro com metade já higienizada, mostrando a diferença da limpeza'},
  {service:'Higienização de bancos',img:'bancos-2',alt:'Extratora retirando sujeira do tecido do banco'},
@@ -192,14 +192,14 @@ function vWizard(){
   const sl=w.date?slots(w.date,m):[];const none=av.every(([,s])=>!s.length);
   return head('Quando?',`Só aparecem horários em que cabem ${fD(m)} de serviço.`)+bar+
   `<div class="days" role="group" aria-label="Dias">${av.map(([d,s])=>{const dd=pdate(d);return `<button id="d-${d}" data-a="wDay" data-v="${d}" class="${d===w.date?'on':''}" ${s.length?'':'disabled'}><small>${WD[dd.getDay()]}</small><b>${dd.getDate()}</b><small>${s.length?s.length+' hor.':'cheio'}</small></button>`}).join('')}</div>
-  ${none?`<div class="empty"><b>Esse serviço não cabe em um único dia aberto.</b><p>Reduza os adicionais ou combine direto com o Giovanni.</p></div>`:`<div class="slots">${sl.map(t=>`<button id="s-${t}" data-a="wSlot" data-v="${t}" class="${w.start===t?'on':''}">${fT(t)}<small>até ${fT(t+m)}</small></button>`).join('')}</div>`}
+  ${none?`<div class="empty"><b>Esse serviço não cabe em um único dia aberto.</b><p>Reduza os adicionais ou combine direto com o Geovane.</p></div>`:`<div class="slots">${sl.map(t=>`<button id="s-${t}" data-a="wSlot" data-v="${t}" class="${w.start===t?'on':''}">${fT(t)}<small>até ${fT(t+m)}</small></button>`).join('')}</div>`}
   ${err}<div class="foot"><button class="btn pri" id="w-next" data-a="wNext3">Revisar pedido</button></div>${back}`;
  }
- return head('Confira o pedido','O horário fica reservado até o Giovanni responder.')+bar+
+ return head('Confira o pedido','O horário fica reservado até o Geovane responder.')+bar+
  `<dl class="dl card"><div><dt>Veículo</dt><dd>${esc(vehName(v))}${v.year?' '+esc(v.year):''}${v.color?' · '+esc(v.color):''}</dd></div>
  <div><dt>Porte</dt><dd>${SIZES[sizeOf(v)]}</dd></div><div><dt>Data</dt><dd>${fDate(w.date)}, ${fT(w.start)} às ${fT(w.start+m)}</dd></div><div><dt>Tempo estimado</dt><dd>${fD(m)}</dd></div></dl>
  <dl class="dl card">${w.items.map(id=>`<div><dt>${esc(svcNames({items:[id]}))}</dt><dd>${money(svc(id).price[sizeOf(v)])}</dd></div>`).join('')}<div class="tot"><dt>Total</dt><dd id="r-total">${money(totalPrice(v,w.items))}</dd></div></dl>${pixBox()}
- <p class="note">Depois de avaliar o veículo, o Giovanni pode ajustar o tempo. Você vê a mudança em Meus agendamentos.</p>
+ <p class="note">Depois de avaliar o veículo, o Geovane pode ajustar o tempo. Você vê a mudança em Meus agendamentos.</p>
  ${err}<div class="foot"><button class="btn pri" id="w-send" data-a="wSend">Pedir agendamento</button></div>${back}`;
 }
 function wStep1(){
@@ -223,12 +223,12 @@ function wStep1(){
  return `<div class="stack tight">${saved}<label class="chk"><input type="radio" name="vs" id="vs-novo" data-c="wVid" value="novo" ${w.vid==='novo'?'checked':''}><span class="grow"><b>Outro veículo</b></span></label></div>${form}`;
 }
 function pixBox(){const k=D.biz.pix;if(!k)return '';return `<div class="pix card"><b>Pagamento por Pix</b><small>Se preferir, pague pelo Pix. Também dá para pagar no Lava Car.</small>${k?`<div class="pix-k"><code>${esc(k)}</code><button class="btn ghost sm" id="pix-cp" data-a="copyPix">Copiar</button></div>`:`<p class="muted">A chave Pix do Lava Car vai aparecer aqui.</p>`}</div>`}
-function vDone(){const b=S.w.doneB;return `<div class="done"><span class="ok-ic">${ic('check',34)}</span><h1>Pedido enviado</h1><p>Seu horário está reservado para ${fDate(b.date).toLowerCase()} às ${fT(b.start)}. Agora é só aguardar a aprovação do Giovanni.</p>
+function vDone(){const b=S.w.doneB;return `<div class="done"><span class="ok-ic">${ic('check',34)}</span><h1>Pedido enviado</h1><p>Seu horário está reservado para ${fDate(b.date).toLowerCase()} às ${fT(b.start)}. Agora é só aguardar a aprovação do Geovane.</p>
  ${pixBox()}<button class="btn pri" id="d-see" data-a="tab" data-v="meus">Ver meus agendamentos</button></div>`}
 function vMeus(){
  const mine=D.bookings.filter(b=>b.clientId===S.user.id).sort((a,b)=>(b.date+pad(b.start)).localeCompare(a.date+pad(a.start)));
  return head('Meus agendamentos')+(mine.length?`<div class="stack">${mine.map(b=>`<article class="card bk t-${tierOf(b)}"><div class="bk-h"><b>${fDate(b.date)}, ${fT(b.start)}</b>${pill(b.status)}</div><p>${esc(vehName(b.vehicle))}${b.vehicle.color?' '+esc(b.vehicle.color.toLowerCase()):''}</p><p class="muted">${esc(svcNames(b))} · ${fD(b.minutes)} · ${money(bPrice(b))}</p>
-  ${b.minutes!==b.estMinutes?`<p class="note">O Giovanni ajustou o tempo de ${fD(b.estMinutes)} para ${fD(b.minutes)}.</p>`:''}${b.note?`<p class="note">Giovanni: ${esc(b.note)}</p>`:''}
+  ${b.minutes!==b.estMinutes?`<p class="note">O Geovane ajustou o tempo de ${fD(b.estMinutes)} para ${fD(b.minutes)}.</p>`:''}${b.note?`<p class="note">Geovane: ${esc(b.note)}</p>`:''}
   ${live(b)?(S.armCancel===b.id?`<div class="two"><button class="btn ghost" data-a="noCancel">Manter</button><button class="btn dng" id="c-yes-${b.id}" data-a="doCancel" data-v="${b.id}">Cancelar pedido</button></div>`:`<button class="link" data-a="armCancel" data-v="${b.id}">Cancelar agendamento</button>`):''}</article>`).join('')}</div>`:`<div class="empty"><b>Nenhum agendamento ainda.</b><p>Escolha um serviço e veja os horários livres.</p><button class="btn pri" data-a="tab" data-v="agendar">Agendar lavagem</button></div>`);
 }
 function vPerfil(){return head(esc(S.user.name),esc(S.user.email||'')+(S.user.phone?' · '+esc(S.user.phone):''),themeBtn())+`<section><h2>Meus veículos</h2><div class="stack tight">${S.user.vehicles.length?S.user.vehicles.map(v=>`<div class="chk"><span class="grow"><b>${esc(vehName(v))}</b> ${esc(v.year||'')}<small>${esc(v.color||'')} · ${SIZES[sizeOf(v)]}</small></span></div>`).join(''):'<p class="muted">Seu veículo fica salvo no primeiro agendamento.</p>'}</div></section>
@@ -299,7 +299,7 @@ function shBooking(){
  const s=S.sheet,b=D.bookings.find(x=>x.id===s.id),v=b.vehicle;
  const can=live(b),ok=fits(s.date,s.start,s.min,b.id);
  const opts=[...new Set([...slots(s.date,s.min,b.id),...(ok?[s.start]:[])])].sort((a,c)=>a-c);
- const wa=waLink(b.phone,`Olá ${b.clientName}! Aqui é o Giovanni, do Sant's Lava Car. Sobre sua lavagem de ${fDate(b.date).toLowerCase()} às ${fT(b.start)}: `);
+ const wa=waLink(b.phone,`Olá ${b.clientName}! Aqui é o Geovane, do Sant's Lava Car. Sobre sua lavagem de ${fDate(b.date).toLowerCase()} às ${fT(b.start)}: `);
  const ch=s.min!==b.minutes||s.start!==b.start||s.date!==b.date;
  return `<div class="bk-h"><h2>${esc(b.clientName)}</h2>${pill(b.status)}</div>
  <dl class="dl"><div><dt>Veículo</dt><dd>${esc(vehName(v))}${v.year?' '+esc(v.year):''}${v.color?' · '+esc(v.color):''}${v.plate?' · '+esc(v.plate.toUpperCase()):''}</dd></div><div><dt>Porte</dt><dd>${SIZES[sizeOf(v)]}</dd></div><div><dt>Serviço</dt><dd>${esc(svcNames(b))}</dd></div><div><dt>Quando</dt><dd>${fDate(b.date)}, ${fT(b.start)} às ${fT(b.start+b.minutes)}</dd></div><div><dt>Valor</dt><dd>${money(bPrice(b))}</dd></div><div><dt>WhatsApp</dt><dd>${esc(b.phone)}</dd></div></dl>

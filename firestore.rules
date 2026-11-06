@@ -4,7 +4,7 @@ service cloud.firestore {
     function signed() { return request.auth != null; }
     function admin() {
       return signed() && request.auth.token.email_verified == true
-        && request.auth.token.email in ['gstsoares27@gmail.com'];
+        && request.auth.token.email in ['gstsoares27@gmail.com', 'geovanesantosx1999@gmail.com'];
     }
     match /config/{id} {
       allow read: if true;
